@@ -1,0 +1,14 @@
+#ifndef H780242A9_4911_4BCD_9374_75545B301CD1
+#define H780242A9_4911_4BCD_9374_75545B301CD1
+
+#include <sched/l4.h>
+
+L4_NS_BEGIN
+
+typedef unsigned short StateId;
+
+const StateId STATE_NIL = 0xFFFF;
+
+L4_NS_END
+
+#endif /* H780242A9_4911_4BCD_9374_75545B301CD1 */
