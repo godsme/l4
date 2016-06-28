@@ -1,6 +1,7 @@
 #ifndef H87056ADD_283D_4836_8BD7_F9074976CCF1
 #define H87056ADD_283D_4836_8BD7_F9074976CCF1
 
+#include <cub/base/BaseTypes.h>
 #include <state/l4.h>
 #include <trans-dsl/ext/mutex/concept/TransMutextId.h>
 #include <trans-dsl/ext/mutex/impl/TransMutexAvailNotifier.h>

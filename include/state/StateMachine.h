@@ -10,7 +10,7 @@ L4_NS_BEGIN
 
 DEFINE_ROLE(StateMachine)
 {
-   //ABSTRACT(tsl::InstanceId getInstanceId() const);
+   ABSTRACT(tsl::InstanceId getInstanceId() const);
 
    // When state should transit, a event handler should
    // call this function to achieve that.
