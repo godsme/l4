@@ -5,6 +5,7 @@
 
 L4_NS_BEGIN
 
+///////////////////////////////////////////////////////////////////
 struct BlockBufferedEventInfo: BufferedEventInfo
 {
    BlockBufferedEventInfo( const TransStrategyDecisionMaker& strategy

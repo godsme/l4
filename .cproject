@@ -41,6 +41,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cub/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/trans-dsl/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/l4/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/l4/tests/foo/include}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1398928668" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
