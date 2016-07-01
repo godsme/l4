@@ -1,4 +1,4 @@
-#include <foo/FooBufferedEventFactory.h>
+#include <foo/l4-sched/FooBufferedEventFactory.h>
 #include <cub/mem/ObjectAllocator.h>
 #include <event/concept/Event.h>
 #include <state/BlockBufferedEventInfo.h>

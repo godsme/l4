@@ -2,7 +2,14 @@
 #define H76437B8C_2657_47D8_81E1_63F75588B31A
 
 #include <state/l4.h>
-#include <cub/base/Keywords.h>
+#include <state/State.h>
+
+namespace tsl
+{
+    struct ActionStatus;
+    struct TransMutexScheduler;
+    struct TransSignalScheduler;
+}
 
 L4_NS_BEGIN
 

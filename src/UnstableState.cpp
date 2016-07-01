@@ -1,4 +1,5 @@
 #include <state/UnstableState.h>
+#include <state/StateMachine.h>
 #include <trans-dsl/utils/ActionStatus.h>
 
 L4_NS_BEGIN
