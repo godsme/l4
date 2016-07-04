@@ -22,6 +22,8 @@
 #include <trans-dsl/ext/signal/action/TransSignalMsg.h>
 #include <trans-dsl/TslStatus.h>
 
+#include <cub/log/log.h>
+
 L4_NS_BEGIN
 
 using namespace cub;
@@ -775,12 +777,6 @@ Status TransStateMachine::handleEvent(const Event& event)
 bool TransStateMachine::isStable() const
 {
     return state ? state->isStable() : false;
-}
-
-//////////////////////////////////////////////////////////////////////////
-Status TransStateMachine::schedEvent(const Event& event)
-{
-    return doBuffer(event);
 }
 
 /////////////////////////////////////////////////////////////////////////

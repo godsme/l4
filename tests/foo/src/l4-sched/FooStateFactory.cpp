@@ -1,14 +1,25 @@
+#include <cub/log/log.h>
 #include <foo/l4-sched/FooStateFactory.h>
+#include <foo/l4-sched/FooIdleState.h>
+
+#include <cub/mem/Placement.h>
+#include <foo/l4-sched/FooEvent.h>
 #include <state/StateId.h>
 #include <trans-dsl/TslStatus.h>
 
 L4_NS_BEGIN
 
+using namespace cub;
+
+union StableStateSpace
+{
+    cub::Placement<FooIdleState> idle;
+};
+
 ///////////////////////////////////////////////////////////////////
 FooStateFactory::FooStateFactory()
-    : state(nullptr)
-    , stateId(STATE_NIL)
 {
+    static_assert(sizeof(u) >= sizeof(StableStateSpace), "");
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -19,7 +30,7 @@ FooStateFactory::~FooStateFactory()
 ///////////////////////////////////////////////////////////////////
 State* FooStateFactory::createInitialState()
 {
-    return nullptr;
+    return createStableState(STATE_Idle);
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -29,14 +40,27 @@ State* FooStateFactory::createFailState(const cub::Status, const ev::Event&)
 }
 
 ///////////////////////////////////////////////////////////////////
-State* FooStateFactory::createStableState(const StateId)
+State* FooStateFactory::createStableState(const StateId id)
 {
+    stateId = id;
+
+    switch (stateId)
+    {
+    case STATE_Idle:
+        return new (&u) FooIdleState;
+    case STATE_Active:
+    default:
+        return nullptr;
+    }
+
     return nullptr;
 }
 
 ///////////////////////////////////////////////////////////////////
-State* FooStateFactory::createUnstableState(const ev::EventId)
+State* FooStateFactory::createUnstableState(const ev::EventId eid)
 {
+    DBG_LOG("create unstable state : %d", eid);
+
     return nullptr;
 }
 
@@ -47,8 +71,10 @@ State* FooStateFactory::createPriUnstableState(const ev::EventId)
 }
 
 ///////////////////////////////////////////////////////////////////
-TransStrategyDecisionMaker* FooStateFactory::getStrategyMaker(const ev::EventId)
+TransStrategyDecisionMaker* FooStateFactory::getStrategyMaker(const ev::EventId eid)
 {
+    DBG_LOG("get strategy maker : %d", eid);
+
     return nullptr;
 }
 
@@ -85,6 +111,11 @@ bool FooStateFactory::isTransEvent(const ev::EventId) const
 ///////////////////////////////////////////////////////////////////
 bool FooStateFactory::isStrategyEvent(const ev::EventId eventId) const
 {
+    switch(eventId)
+    {
+    case EV_EVENT1: return true;
+    }
+
     return false;
 }
 

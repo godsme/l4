@@ -41,9 +41,7 @@ private:
 public:
    ABSTRACT(cub::Status saveEvent(const EventInfo&));
 
-   ABSTRACT(const void* getMsg() const);
    ABSTRACT(const void* getMsgBuffer() const);
-   ABSTRACT(size_t getMsgSize() const);
 };
 
 L4_NS_END

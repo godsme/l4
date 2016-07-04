@@ -4,6 +4,7 @@
 #include <cub/base/Keywords.h>
 #include <event/concept/EventId.h>
 #include <state/StateFactory.h>
+#include <state/StateId.h>
 #include <trans-dsl/ext/mutex/impl/AbstractTransMutexScheduler.h>
 
 FWD_DECL_TSL(TransMutexAvailNotifier);
@@ -53,9 +54,9 @@ private:
 //   State* resumeInitState();
 
 private:
-   State* state;
+   State* state = nullptr;
 
-   StateId stateId;
+   StateId stateId = STATE_NIL;
 
    enum { SIZE_OF_STATE_SPACE     = 8
         , SIZE_OF_LISTENER_SPACE  = 8 };

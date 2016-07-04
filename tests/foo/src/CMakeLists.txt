@@ -9,3 +9,5 @@ include_directories(../../../../cub/include ../../../../event/include ../../../.
 
 add_library(foo STATIC ${all_files})
 
+install(TARGETS foo ARCHIVE DESTINATION lib)
+

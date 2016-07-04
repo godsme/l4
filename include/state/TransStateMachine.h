@@ -24,11 +24,11 @@ struct EventQueue;
 struct BufferedEventInfo;
 
 struct TransStateMachine
-    : StateMachine
+    : protected SimpleTransAvailMutex
+    , protected tsl::AbstractTransSignalScheduler
     , TransMsgSender
     , TransMsgDiscarder
-    , protected SimpleTransAvailMutex
-    , protected tsl::AbstractTransSignalScheduler
+    , StateMachine
 {
    TransStateMachine
      ( StateFactory&
@@ -84,7 +84,6 @@ private:
 public:
    OVERRIDE(void transitTo(const StateId));
    OVERRIDE(tsl::InstanceId getInstanceId() const);
-   OVERRIDE(cub::Status schedEvent(const ev::Event&));
 
 
 private:

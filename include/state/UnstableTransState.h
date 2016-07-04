@@ -2,6 +2,9 @@
 #define H5A78E912_2FE1_4D4A_899A_82B0C1D325E8
 
 #include <state/UnstableState.h>
+#include <trans-dsl/tsl.h>
+
+FWD_DECL_TSL(Transaction);
 
 L4_NS_BEGIN
 
@@ -10,6 +13,10 @@ struct TransSignalScheduler;
 
 struct UnstableTransState : UnstableState
 {
+    explicit UnstableTransState(const StateId to)
+      : UnstableState(to)
+    {}
+
     OVERRIDE(cub::Status doEnter());
     OVERRIDE(cub::Status doLeave(const cub::Status cause));
     OVERRIDE(cub::Status doHandleEvent(const ev::Event&));
@@ -18,7 +25,6 @@ struct UnstableTransState : UnstableState
 private:
     cub::Status postprocess(const ev::Event& event);
 
-private:
     virtual cub::Status postTransaction(const ev::Event&);
 
 private:
