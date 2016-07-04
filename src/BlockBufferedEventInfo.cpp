@@ -54,6 +54,7 @@ Status BlockBufferedEventInfo::saveMsg(const EventInfo& event)
       if(event.getMsgSize() != 0) return TSL_FAILED;
 
       size = 0;
+
       return TSL_SUCCESS;
    }
 

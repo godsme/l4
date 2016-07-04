@@ -1,0 +1,108 @@
+#include <foo/l4-sched/FooStateFactory.h>
+#include <state/StateId.h>
+#include <trans-dsl/TslStatus.h>
+
+L4_NS_BEGIN
+
+///////////////////////////////////////////////////////////////////
+FooStateFactory::FooStateFactory()
+    : state(nullptr)
+    , stateId(STATE_NIL)
+{
+}
+
+///////////////////////////////////////////////////////////////////
+FooStateFactory::~FooStateFactory()
+{
+}
+
+///////////////////////////////////////////////////////////////////
+State* FooStateFactory::createInitialState()
+{
+    return nullptr;
+}
+
+///////////////////////////////////////////////////////////////////
+State* FooStateFactory::createFailState(const cub::Status, const ev::Event&)
+{
+    return nullptr;
+}
+
+///////////////////////////////////////////////////////////////////
+State* FooStateFactory::createStableState(const StateId)
+{
+    return nullptr;
+}
+
+///////////////////////////////////////////////////////////////////
+State* FooStateFactory::createUnstableState(const ev::EventId)
+{
+    return nullptr;
+}
+
+///////////////////////////////////////////////////////////////////
+State* FooStateFactory::createPriUnstableState(const ev::EventId)
+{
+    return nullptr;
+}
+
+///////////////////////////////////////////////////////////////////
+TransStrategyDecisionMaker* FooStateFactory::getStrategyMaker(const ev::EventId)
+{
+    return nullptr;
+}
+
+///////////////////////////////////////////////////////////////////
+FailedRequestListener* FooStateFactory::getFailedRequestListener(const ev::EventId)
+{
+    return nullptr;
+}
+
+///////////////////////////////////////////////////////////////////
+cub::Status FooStateFactory::getFailCauseByEvent(const ev::Event&) const
+{
+    return TSL_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////
+cub::Status FooStateFactory::getInterruptCauseByEvent(const ev::Event&) const
+{
+    return TSL_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////
+cub::Status FooStateFactory::getPreemptCauseByEvent(const ev::Event&) const
+{
+    return TSL_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////
+bool FooStateFactory::isTransEvent(const ev::EventId) const
+{
+    return false;
+}
+
+///////////////////////////////////////////////////////////////////
+bool FooStateFactory::isStrategyEvent(const ev::EventId eventId) const
+{
+    return false;
+}
+
+///////////////////////////////////////////////////////////////////
+bool FooStateFactory::isTerminalEvent(const ev::EventId) const
+{
+    return false;
+
+}
+
+///////////////////////////////////////////////////////////////////
+void FooStateFactory::destroyState(State*)
+{
+}
+
+///////////////////////////////////////////////////////////////////
+void FooStateFactory::reset()
+{
+}
+
+L4_NS_END

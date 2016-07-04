@@ -43,6 +43,10 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/l4/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/l4/tests/foo/include}&quot;"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.1337696348" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__=1"/>
+									<listOptionValue builtIn="false" value="__GNUC__=4"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1398928668" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.macosx.base.1749499275" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.macosx.base">
@@ -50,6 +54,9 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/event/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/trans-dsl/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/l4/include}&quot;"/>
+								</option>
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1802679103" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__=1"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1927841551" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>

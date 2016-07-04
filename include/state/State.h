@@ -22,19 +22,19 @@ struct StateMachine;
 struct State : TransStrategyDecisionMaker
 {
    ABSTRACT(StateId getId() const);
-   ABSTRACT(bool   isStable() const);
+   ABSTRACT(bool    isStable() const);
 
    ABSTRACT(cub::Status enter(StateMachine&));
    ABSTRACT(cub::Status handleEvent(StateMachine&, const ev::Event&));
    ABSTRACT(cub::Status leave(StateMachine&, const cub::Status cause = TSL_SUCCESS));
    ABSTRACT(void   kill(StateMachine&, const cub::Status cause = TSL_SUCCESS));
 
-   virtual cub::Status onIdle(StateMachine&) { return TSL_SUCCESS; }
-   virtual cub::Status onIdleTransSchedule(StateMachine&) { return TSL_SUCCESS; }
-   virtual void onReentry(StateMachine&) {}
-   virtual bool isInitState() const { return false; }
+   DEFAULT(cub::Status, onIdle(StateMachine&));
+   DEFAULT(cub::Status, onIdleTransSchedule(StateMachine&));
+   DEFAULT(void, onReentry(StateMachine&));
+   DEFAULT(bool, isInitState() const);
 
-   virtual bool ignoreFailure() const { return false; }
+   DEFAULT(bool, ignoreFailure() const);
 };
 
 L4_NS_END

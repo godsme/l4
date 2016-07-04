@@ -5,8 +5,8 @@
 L4_NS_BEGIN
 
 //////////////////////////////////////////////////////////////////////////
-UnstableState::UnstableState()
-   : from(STATE_NIL)
+UnstableState::UnstableState(const StateId to)
+   : from(STATE_NIL), to(to)
 {
 }
 
@@ -51,7 +51,7 @@ cub::Status UnstableState::finalProcess(StateMachine& context, const tsl::Action
 {
     if(result.isDone())
     {
-        context.transitTo(getToState());
+        context.transitTo(to);
         return TSL_SUCCESS;
     }
 

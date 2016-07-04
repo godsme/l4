@@ -1,14 +1,17 @@
 #ifndef H7281C760_7346_4E54_ADA4_BF0C6CA4AC11
 #define H7281C760_7346_4E54_ADA4_BF0C6CA4AC11
 
+#include <cub/base/Keywords.h>
 #include <event/concept/EventId.h>
-#include <state/l4.h>
+#include <state/StateFactory.h>
 #include <trans-dsl/ext/mutex/impl/AbstractTransMutexScheduler.h>
 
 FWD_DECL_TSL(TransMutexAvailNotifier);
 FWD_DECL_TSL(TransSignalScheduler);
 
 L4_NS_BEGIN
+
+struct UnstableState;
 
 struct FooStateFactory
     : StateFactory
@@ -17,42 +20,40 @@ struct FooStateFactory
    FooStateFactory();
    ~FooStateFactory();
 
-   State* createInitialState();
-   State* createFailState(const cub::Status, const ev::Event&);
-   State* createStableState(const StateId);
-   State* createUnstableState(const ev::EventId);
-   State* createPriUnstableState(const ev::EventId);
+   OVERRIDE(State* createInitialState());
+   OVERRIDE(State* createFailState(const cub::Status, const ev::Event&));
+   OVERRIDE(State* createStableState(const StateId));
+   OVERRIDE(State* createUnstableState(const ev::EventId));
+   OVERRIDE(State* createPriUnstableState(const ev::EventId));
 
-   cub::Status destroyState(State*);
-   void reset();
+   OVERRIDE(TransStrategyDecisionMaker* getStrategyMaker(const ev::EventId));
+   OVERRIDE(FailedRequestListener* getFailedRequestListener(const ev::EventId));
 
-   TransStrategyDecisionMaker* getStrategyMaker(const ev::EventId);
-   FailedRequestListener* getFailedRequestListener(const ev::EventId);
+   OVERRIDE(cub::Status getFailCauseByEvent(const ev::Event&) const);
+   OVERRIDE(cub::Status getInterruptCauseByEvent(const ev::Event&) const);
+   OVERRIDE(cub::Status getPreemptCauseByEvent(const ev::Event&) const);
 
-   cub::Status getFailCauseByEvent(const ev::Event&) const;
-   cub::Status getInterruptCauseByEvent(const ev::Event&) const;
-   cub::Status getPreemptCauseByEvent(const ev::Event&) const;
+   OVERRIDE(bool isTransEvent(const ev::EventId) const);
+   OVERRIDE(bool isStrategyEvent(const ev::EventId eventId) const);
+   OVERRIDE(bool isTerminalEvent(const ev::EventId) const);
 
-   bool isTransEvent(const ev::EventId);
-   bool isStrategyEvent(const ev::EventId eventId);
-   bool isRunningState(const StateId& ) const;
-   bool isTerminalEvent(const ev::EventId) const;
+   OVERRIDE(void destroyState(State*));
+   OVERRIDE(void reset());
 
 private:
-   State* doCreateState(const StateId);
-   UnstableState* doCreateUnstableState(const ev::EventId);
-   void updateState(UnstableState* newState);
-
-   void destroy();
-   void destroyPriState();
-   void updateFailStateId();
-
-   State* prepFailTrans(UnstableState* failState, const cub::Status failCause);
-   State* resumeInitState();
+//   State* doCreateState(const StateId);
+//   UnstableState* doCreateUnstableState(const ev::EventId);
+//   void updateState(UnstableState* newState);
+//
+//   void destroy();
+//   void destroyPriState();
+//   void updateFailStateId();
+//
+//   State* prepFailTrans(UnstableState* failState, const cub::Status failCause);
+//   State* resumeInitState();
 
 private:
    State* state;
-   UnstableState* priState;
 
    StateId stateId;
 
@@ -67,7 +68,6 @@ protected:
    typedef tsl::TransSignalScheduler TransSignalScheduler;
 
 private:
-   USE_ROLE(TransMutexAvailNotifier);
    USE_ROLE(TransSignalScheduler);
 };
 
