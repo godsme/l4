@@ -5,7 +5,7 @@
 #include <foo/l2-context/FooAsynAction2.h>
 #include <foo/l2-context/FooSyncAction3.h>
 #include <foo/l3-trans/FooGenericTransaction.h>
-#include <foo/l3-trans/FooTrans1Context.h>
+#include <foo/l3-trans/trans1/FooTrans1Context.h>
 #include <trans-dsl/sched/concept/TransactionListener.h>
 #include <trans-dsl/TransactionDsl.h>
 

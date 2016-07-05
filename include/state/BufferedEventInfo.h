@@ -30,7 +30,7 @@ struct BufferedEventInfo : cub::ListElem<BufferedEventInfo>
 public:
    OVERRIDE(void reject(const tsl::InstanceId iid) const);
    OVERRIDE(const EventInfo& getEventInfo() const);
-   OVERRIDE(TransStrategy getStrategy(const tsl::InstanceId, const ev::Event&) const);
+   OVERRIDE(TransStrategy getStrategy(const ev::Event&) const);
 
 private:
    const TransStrategyDecisionMaker*  strategy;

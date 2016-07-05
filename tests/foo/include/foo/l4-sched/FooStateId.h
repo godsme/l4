@@ -8,6 +8,8 @@ L4_NS_BEGIN
 enum : StateId
 {
     STATE_Trans1,
+    STATE_Trans2,
+    STATE_Release,
 
     STATE_Idle,
     STATE_Active,

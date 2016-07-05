@@ -6,6 +6,7 @@
 #include <state/UnstableTransState.h>
 #include <trans-dsl/sched/concept/InstanceId.h>
 #include <event/event.h>
+#include <state/TransStrategyDecisionMaker.h>
 
 FWD_DECL_EV(Event);
 
@@ -25,9 +26,9 @@ private:
             : TransStrategyDecisionMaker
             , cub::Singleton< TransStaticStrategy<STRATEGY_TABLE> >
     {
-        OVERRIDE(TransStrategy getStrategy(const tsl::InstanceId iid, const ev::Event& ev) const)
+        OVERRIDE(TransStrategy getStrategy(const ev::Event& event) const)
         {
-            return STRATEGY_TABLE::getStrategy(iid, ev);
+            return STRATEGY_TABLE::getStrategy(event);
         }
     };
 
@@ -45,9 +46,9 @@ public:
         return P_SID;
     }
 
-    static TransStrategyDecisionMaker& getStrategyDecisionMaker()
+    static TransStrategyDecisionMaker* getStrategyDecisionMaker()
     {
-        return StaticStrategy::getInstance();
+        return &StaticStrategy::getInstance();
     }
 
     OVERRIDE(TransStrategy getStrategy(const tsl::InstanceId iid, const ev::Event& event) const)
@@ -58,7 +59,7 @@ public:
             return strategy;
         }
 
-        return getStrategyDecisionMaker().getStrategy(iid, event) ;
+        return P_STATIC_STRATEGY_TABLE::getStrategy(event);
     }
 
 protected:

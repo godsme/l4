@@ -8,7 +8,7 @@
 #include <event/event.h>
 #include <state/StateId.h>
 #include <state/TransStrategy.h>
-#include <state/TransStrategyDecisionMaker.h>
+#include <trans-dsl/sched/concept/InstanceId.h>
 #include <trans-dsl/TslStatus.h>
 
 FWD_DECL_EV(Event);
@@ -17,9 +17,7 @@ L4_NS_BEGIN
 
 struct StateMachine;
 
-struct StateMachine;
-
-struct State : TransStrategyDecisionMaker
+DEFINE_ROLE(State)
 {
    ABSTRACT(StateId getId() const);
    ABSTRACT(bool    isStable() const);
@@ -28,6 +26,8 @@ struct State : TransStrategyDecisionMaker
    ABSTRACT(cub::Status handleEvent(StateMachine&, const ev::Event&));
    ABSTRACT(cub::Status leave(StateMachine&, const cub::Status cause = TSL_SUCCESS));
    ABSTRACT(void   kill(StateMachine&, const cub::Status cause = TSL_SUCCESS));
+
+   ABSTRACT(TransStrategy getStrategy(const tsl::InstanceId, const ev::Event&) const);
 
    DEFAULT(cub::Status, onIdle(StateMachine&));
    DEFAULT(cub::Status, onIdleTransSchedule(StateMachine&));

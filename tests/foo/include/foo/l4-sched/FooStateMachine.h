@@ -12,7 +12,7 @@ struct FooStateMachine
         , private EventQueue
         , TransStateMachine
 {
-    FooStateMachine(tsl::InstanceId);
+    explicit FooStateMachine(tsl::InstanceId);
 
 private:
     typedef tsl::TransMutexAvailNotifier TransMutexAvailNotifier;

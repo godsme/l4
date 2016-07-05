@@ -43,9 +43,9 @@ void BufferedEventInfo::reject(const InstanceId iid) const
 }
 
 ////////////////////////////////////////////////////////////////////////////
-TransStrategy BufferedEventInfo::getStrategy(const InstanceId iid, const Event& event) const
+TransStrategy BufferedEventInfo::getStrategy(const Event& event) const
 {
-   return (strategy == 0) ? TS_FAIL : strategy->getStrategy(iid, event);
+   return (strategy == 0) ? TS_FAIL : strategy->getStrategy(event);
 }
 
 ////////////////////////////////////////////////////////////////////////////

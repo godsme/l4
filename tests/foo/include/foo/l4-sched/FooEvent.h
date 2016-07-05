@@ -8,8 +8,12 @@ L4_NS_BEGIN
 
 enum : ev::EventId
 {
-    EV_EVENT1,
-    EV_EVENT2
+    EV_EVENT1_T,
+    EV_EVENT2,
+    EV_EVENT4_T,
+    EV_EVENT5,
+    EV_EVENT_R,
+    EV_EVENT6
 };
 
 struct Event1
@@ -19,7 +23,12 @@ struct Event1
 
 struct Event2
 {
-    int c, d;
+    bool c, d;
+};
+
+struct Event4
+{
+    float c, d;
 };
 
 L4_NS_END

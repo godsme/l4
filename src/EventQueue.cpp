@@ -22,9 +22,9 @@ namespace
       SimpleTransEvent(const Event& event, TransStrategyDecisionMaker& strategy, FailedRequestListener* listener)
          : event(event), strategy(strategy), listener(listener) {}
 
-      OVERRIDE(TransStrategy getStrategy(const InstanceId iid, const Event& event) const)
+      OVERRIDE(TransStrategy getStrategy(const Event& event) const)
       {
-         return strategy.getStrategy(iid, event);
+         return strategy.getStrategy(event);
       }
 
       OVERRIDE(const EventInfo& getEventInfo() const)
@@ -100,7 +100,7 @@ private:
 
    void handlePreemptedEvent(const TransactionEvent& event, BufferedEventInfo* preempted)
    {
-       TransStrategy strategy = event.getStrategy(iid, preempted->getEventInfo());
+       TransStrategy strategy = event.getStrategy(preempted->getEventInfo());
       switch(strategy)
       {
       case TS_BUFFER:
@@ -193,7 +193,7 @@ private:
 
    Status process(Iterator& info, const TransactionEvent& incomingEvent)
    {
-      switch (info->getStrategy(iid, incomingEvent.getEventInfo()))
+      switch (info->getStrategy(incomingEvent.getEventInfo()))
       {
       case TS_NIL:
       case TS_DISCARD:

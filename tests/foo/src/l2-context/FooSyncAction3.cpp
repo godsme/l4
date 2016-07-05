@@ -1,5 +1,6 @@
 #include <foo/l2-context/FooSyncAction3.h>
 #include <trans-dsl/TslStatus.h>
+#include <cub/log/log.h>
 
 L4_NS_BEGIN
 

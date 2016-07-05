@@ -6,6 +6,7 @@
 #include <state/StateFactory.h>
 #include <state/StateId.h>
 #include <trans-dsl/ext/mutex/impl/AbstractTransMutexScheduler.h>
+#include <trans-dsl/sched/concept/InstanceId.h>
 
 FWD_DECL_TSL(TransMutexAvailNotifier);
 FWD_DECL_TSL(TransSignalScheduler);
@@ -18,7 +19,7 @@ struct FooStateFactory
     : StateFactory
     , private tsl::AbstractTransMutexScheduler
 {
-   FooStateFactory();
+   explicit FooStateFactory(tsl::InstanceId);
    ~FooStateFactory();
 
    OVERRIDE(State* createInitialState());
@@ -42,6 +43,9 @@ struct FooStateFactory
    OVERRIDE(void reset());
 
 private:
+
+   StateId getStateIdByEvent(const ev::EventId) const;
+
 //   State* doCreateState(const StateId);
 //   UnstableState* doCreateUnstableState(const ev::EventId);
 //   void updateState(UnstableState* newState);
@@ -63,6 +67,8 @@ private:
 
    cub::U8 u[SIZE_OF_STATE_SPACE];
    cub::U8 listener[SIZE_OF_LISTENER_SPACE];
+
+   tsl::InstanceId iid;
 
 protected:
    typedef tsl::TransMutexAvailNotifier TransMutexAvailNotifier;
