@@ -10,6 +10,13 @@ template <typename TRANS, typename CONTEXT, typename LISTENER>
 struct FooGenericTransaction
    : tsl::GenericTransaction<FooTimerInfo, TRANS, CONTEXT, LISTENER>
 {
+private:
+    typedef tsl::GenericTransaction<FooTimerInfo, TRANS, CONTEXT, LISTENER> Base;
+
+public:
+    FooGenericTransaction(tsl::InstanceId iid)
+        : Base(iid)
+    {}
 };
 
 L4_NS_END

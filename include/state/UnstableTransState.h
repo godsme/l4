@@ -27,7 +27,7 @@ private:
 
     virtual cub::Status postTransaction(const ev::Event&);
 
-private:
+protected:
     typedef tsl::Transaction Transaction;
 
     USE_ROLE(Transaction);
