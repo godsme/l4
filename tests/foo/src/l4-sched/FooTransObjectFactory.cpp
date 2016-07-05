@@ -1,3 +1,4 @@
+#include <cub/mem/ObjectAllocator.h>
 #include <foo/l4-sched/FooTransObjectFactory.h>
 #include <cub/mem/Placement.h>
 #include <foo/l4-sched/FooStateId.h>
@@ -11,36 +12,62 @@ using namespace cub;
 
 namespace
 {
-    union
+    template <typename STATE>
+    struct FooUnstableState
+            : STATE
     {
-        Placement<FooTrans1State>  trans1;
-        Placement<FooTrans2State>  trans2;
-        Placement<FooReleaseState> release;
-    }u;
+        explicit FooUnstableState(tsl::InstanceId iid)
+            : STATE(iid)
+        {}
+
+
+        void* operator new(size_t size) throw();
+        void operator delete(void* p);
+    };
+
+    ///////////////////////////////////////////////////////////////////
+    #define __STATE(type) FooUnstableState<type>
+    #define PLACE(type) Placement<__STATE(type) >  obj##type
+
+    union Block
+    {
+        PLACE(FooTrans1State);
+        PLACE(FooTrans2State);
+        PLACE(FooReleaseState);
+    };
+
+    cub::ObjectAllocator<Block, 500> allocator;
+
+
+    template <typename STATE>
+    void* FooUnstableState<STATE>::operator new(size_t size) throw()
+    {
+        if(size > sizeof(Block)) return nullptr;
+
+        return allocator.alloc();
+    }
+
+    template <typename STATE>
+    void FooUnstableState<STATE>::operator delete(void* p)
+    {
+        allocator.free(p);
+    }
 }
 
-FooTrans1State a(0);
+///////////////////////////////////////////////////////////////////
+#define __S(id, type) case STATE_ ## id: return new __STATE(type)(iid)
 
 ///////////////////////////////////////////////////////////////////
 UnstableState* FooTransObjectFactory::createState(const tsl::InstanceId iid, const StateId sid)
 {
     switch(sid)
     {
-    case STATE_Trans1:
-        return new(&u) FooTrans1State(iid);
-    case STATE_Trans2:
-        return new(&u) FooTrans2State(iid);
-    case STATE_Release:
-        return new(&u) FooReleaseState(iid);
+    __S(Trans1,  FooTrans1State);
+    __S(Trans2,  FooTrans2State);
+    __S(Release, FooReleaseState);
     }
 
     return nullptr;
-}
-
-///////////////////////////////////////////////////////////////////
-void FooTransObjectFactory::destroyState(UnstableState* state)
-{
-    state->~UnstableState();
 }
 
 L4_NS_END

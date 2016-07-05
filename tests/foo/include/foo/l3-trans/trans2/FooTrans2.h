@@ -12,14 +12,17 @@
 
 L4_NS_BEGIN
 
+///////////////////////////////////////////////////////////////////
 __def_transaction
 ( __sequential
     ( __asyn(FooAsynAction4)
     , __asyn(FooAsynAction5)
     , __sync(FooSyncAction3))
+, __finally(__on_fail(__throw(TSL_NOTHING_CHANGED)))
 ) FooTrans2;
 
-typedef FooGenericTransaction<FooTrans2, FooTrans2Context, tsl::TransactionListener> FooTrans2Trans;
+///////////////////////////////////////////////////////////////////
+__def_pack_trans(FooTrans2, FooTrans2Context) FooTrans2Trans;
 
 L4_NS_END
 

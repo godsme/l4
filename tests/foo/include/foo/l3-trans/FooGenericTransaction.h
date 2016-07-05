@@ -3,21 +3,20 @@
 
 #include <trans-dsl/sched/trans/GenericTransaction.h>
 #include <foo/l1-domain/FooTimerInfo.h>
+#include <trans-dsl/sched/concept/TransactionListener.h>
 
 L4_NS_BEGIN
 
-template <typename TRANS, typename CONTEXT, typename LISTENER>
+template <typename TRANS, typename CONTEXT, typename LISTENER = tsl::TransactionListener>
 struct FooGenericTransaction
    : tsl::GenericTransaction<FooTimerInfo, TRANS, CONTEXT, LISTENER>
 {
-private:
-    typedef tsl::GenericTransaction<FooTimerInfo, TRANS, CONTEXT, LISTENER> Base;
-
-public:
     FooGenericTransaction(tsl::InstanceId iid)
-        : Base(iid)
+        : tsl::GenericTransaction<FooTimerInfo, TRANS, CONTEXT, LISTENER>(iid)
     {}
 };
+
+#define __def_pack_trans(trans, context, ...) typedef FooGenericTransaction<trans, context, ##__VA_ARGS__>
 
 L4_NS_END
 

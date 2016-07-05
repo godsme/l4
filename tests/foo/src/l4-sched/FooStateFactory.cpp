@@ -17,11 +17,14 @@ L4_NS_BEGIN
 
 using namespace cub;
 
-union StableStateSpace
+namespace
 {
-    cub::Placement<FooIdleState> idle;
-    cub::Placement<FooActiveState> active;
-};
+    union StableStateSpace
+    {
+        cub::Placement<FooIdleState> idle;
+        cub::Placement<FooActiveState> active;
+    };
+}
 
 ///////////////////////////////////////////////////////////////////
 FooStateFactory::FooStateFactory(tsl::InstanceId iid) : iid(iid)
@@ -137,7 +140,10 @@ cub::Status FooStateFactory::getPreemptCauseByEvent(const ev::Event&) const
 ///////////////////////////////////////////////////////////////////
 void FooStateFactory::destroyState(State* state)
 {
-    state->~State();
+    if(!state->isStable())
+    {
+        delete state;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////

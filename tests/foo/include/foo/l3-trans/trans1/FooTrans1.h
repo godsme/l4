@@ -16,9 +16,11 @@ __def_transaction
     ( __asyn(FooAsynAction1)
     , __asyn(FooAsynAction2)
     , __sync(FooSyncAction3))
+, __finally(__on_fail(__throw(TSL_NOTHING_CHANGED)))
 ) FooTrans1;
 
-typedef FooGenericTransaction<FooTrans1, FooTrans1Context, tsl::TransactionListener> FooTrans1Trans;
+///////////////////////////////////////////////////////////////////
+__def_pack_trans(FooTrans1, FooTrans1Context) FooTrans1Trans;
 
 L4_NS_END
 

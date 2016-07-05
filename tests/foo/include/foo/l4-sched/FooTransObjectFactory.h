@@ -11,7 +11,6 @@ struct UnstableState;
 struct FooTransObjectFactory
 {
     static UnstableState* createState(const tsl::InstanceId, const StateId);
-    static void destroyState(UnstableState*);
 };
 
 L4_NS_END

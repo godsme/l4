@@ -11,6 +11,7 @@
 
 L4_NS_BEGIN
 
+///////////////////////////////////////////////////////////////////
 __def_transaction
 ( __sequential
     ( __asyn(FooAsynActionR)
@@ -18,7 +19,9 @@ __def_transaction
     , __asyn(FooAsynAction6))
 ) FooRelease;
 
-typedef FooGenericTransaction<FooRelease, FooReleaseContext, tsl::TransactionListener> FooReleaseTrans;
+///////////////////////////////////////////////////////////////////
+__def_pack_trans(FooRelease, FooReleaseContext) FooReleaseTrans;
+///////////////////////////////////////////////////////////////////
 
 L4_NS_END
 
