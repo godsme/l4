@@ -40,7 +40,7 @@ inline Status TransStateMachine::leaveState(const Status cause)
 //////////////////////////////////////////////////////////////
 inline TransStrategy TransStateMachine::getStrategyOnState(const Event& event) const
 {
-    if(!factory.isStrategyEvent(event.getEventId())) return TS_NIL;
+    //if(!factory.isStrategyEvent(event.getEventId())) return TS_NIL;
 
     if(__unlikely(state == 0)) return TS_NIL;
 
@@ -95,6 +95,12 @@ void TransStateMachine::transitTo(const StateId stateId)
    nextStateId = stateId;
 }
 
+///////////////////////////////////////////////////////////////////
+inline StateId TransStateMachine::getStateId() const
+{
+    return state == nullptr ? STATE_NIL : state->getId();
+}
+
 //////////////////////////////////////////////////////////////
 inline StateId TransStateMachine::fetchNextState()
 {
@@ -146,16 +152,18 @@ inline void TransStateMachine::quiteSuspendState(const Status cause)
     suspendState = 0;
 }
 
-//////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
 inline Status TransStateMachine::reject(const Event& event)
 {
-    event.consume();
-
     FailedRequestListener* listener = factory.getFailedRequestListener(event.getEventId());
-    if(__likely(listener != 0 && state != 0))
+    if(listener == nullptr)
     {
-        listener->onReject(iid, event, state->getId());
+        return TSL_UNKNOWN_EVENT;
     }
+
+    listener->onReject(iid, event, getStateId());
+
+    event.consume();
 
     return TSL_CONTINUE;
 }
@@ -163,11 +171,15 @@ inline Status TransStateMachine::reject(const Event& event)
 //////////////////////////////////////////////////////////////
 inline Status TransStateMachine::doBuffer(const Event& event)
 {
-    CUB_ASSERT_TRUE(isTransEvent(event));
+    //CUB_ASSERT_TRUE(isTransEvent(event));
+
+    TransStrategyDecisionMaker* strategy = factory.getStrategyMaker(event.getEventId());
+    if(strategy == nullptr)
+    {
+        return TSL_UNKNOWN_EVENT;
+    }
 
     FailedRequestListener* listener = factory.getFailedRequestListener(event.getEventId());
-    TransStrategyDecisionMaker* strategy = factory.getStrategyMaker(event.getEventId());
-    CUB_ASSERT_VALID_PTR_R(strategy, TSL_FATAL_BUG);
 
     return eventQueue.put(iid, event, *strategy, listener);
 }
@@ -183,12 +195,12 @@ inline void TransStateMachine::discardBufferedEvent(EventId eventId)
     }
 }
 
-void TransStateMachine::doDiscard(EventId eventId)
-{
-    CUB_ASSERT_TRUE_VOID(isTransEvent(Event(SimpleEventInfo(eventId))));
-
-    discardBufferedEvent(eventId);
-}
+//void TransStateMachine::doDiscard(EventId eventId)
+//{
+//    //CUB_ASSERT_TRUE_VOID(isTransEvent(Event(SimpleEventInfo(eventId))));
+//
+//    discardBufferedEvent(eventId);
+//}
 
 //////////////////////////////////////////////////////////////
 inline Status TransStateMachine::buffer(const Event& event)
@@ -205,12 +217,16 @@ inline Status TransStateMachine::buffer(const Event& event)
 //////////////////////////////////////////////////////////////////////////
 inline Status TransStateMachine::purge(const Event& event)
 {
-    CUB_ASSERT_TRUE(isTransEvent(event));
+    //CUB_ASSERT_TRUE(isTransEvent(event));
 
     // Failed request listener is allowed to be null.
-    FailedRequestListener* listener = factory.getFailedRequestListener(event.getEventId());
     TransStrategyDecisionMaker* strategy = factory.getStrategyMaker(event.getEventId());
-    CUB_ASSERT_VALID_PTR_R(strategy, TSL_FATAL_BUG);
+    if(strategy == nullptr)
+    {
+        return TSL_UNKNOWN_EVENT;
+    }
+
+    FailedRequestListener* listener = factory.getFailedRequestListener(event.getEventId());
 
     return eventQueue.purge(iid, event, *strategy, listener);
 }
@@ -218,7 +234,7 @@ inline Status TransStateMachine::purge(const Event& event)
 //////////////////////////////////////////////////////////////
 inline Status TransStateMachine::preempt(const Event& event)
 {
-    CUB_ASSERT_TRUE(isTransEvent(event));
+    //CUB_ASSERT_TRUE(isTransEvent(event));
 
     //
     // IMPORTANT:
@@ -269,7 +285,8 @@ inline void TransStateMachine::rejectAllBufferedEvents()
 //////////////////////////////////////////////////////////////////////////
 inline void TransStateMachine::rejectAllEvents(const Event& event)
 {
-    if(!event.isConsumed() && !factory.isTerminalEvent(event.getEventId()))
+    //if(!event.isConsumed() && !factory.isTerminalEvent(event.getEventId()))
+    if(!event.isConsumed())
     {
         reject(event);
     }
@@ -342,13 +359,15 @@ inline Status TransStateMachine::fail(const Event& event)
 //////////////////////////////////////////////////////////////
 Status TransStateMachine::discard(const Event& event)
 {
-   event.consume();
-
    FailedRequestListener* listener = factory.getFailedRequestListener(event.getEventId());
-   if(__likely(listener != 0))
+   if(listener == nullptr)
    {
-       listener->onDiscard(iid, event, state->getId());
+       return TSL_UNKNOWN_EVENT;
    }
+
+   listener->onDiscard(iid, event, getStateId());
+
+   event.consume();
 
    return TSL_CONTINUE;
 }
@@ -386,11 +405,11 @@ inline Status TransStateMachine::suspend(const Event& event)
     return run(factory.createPriUnstableState(event.getEventId()), event);
 }
 
-//////////////////////////////////////////////////////////////////////////
-inline bool TransStateMachine::isTransEvent(const Event& event) const
-{
-    return factory.isTransEvent(event.getEventId());
-}
+////////////////////////////////////////////////////////////////////////////
+//inline bool TransStateMachine::isTransEvent(const Event& event) const
+//{
+//    return factory.isTransEvent(event.getEventId());
+//}
 
 //////////////////////////////////////////////////////////////
 Status TransStateMachine::handleTransEvent(const Event& event)
@@ -514,7 +533,7 @@ Status TransStateMachine::doReescheduleOnUnstable()
 //////////////////////////////////////////////////////////////////////////
 inline Status TransStateMachine::rescheduleOnUnstable()
 {
-    CUB_ASSERT_SUCC_CALL(eventQueue.startReeschedule());
+    CUB_ASSERT_SUCC_CALL(eventQueue.startReschedule());
 
     Status status = doReescheduleOnUnstable();
 
@@ -538,9 +557,9 @@ inline Status TransStateMachine::gotoNextState()
 /////////////////////////////////////////////////////////////
 inline Status TransStateMachine::onStateDone(const Event& event)
 {
-    if(!event.isConsumed() && isTransEvent(event))
+    if(!event.isConsumed())
     {
-        CUB_ASSERT_TRUE(buffer(event));
+        buffer(event);
     }
 
     return gotoNextState();

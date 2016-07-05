@@ -27,7 +27,7 @@ struct TransStateMachine
     : protected SimpleTransAvailMutex
     , protected tsl::AbstractTransSignalScheduler
     , TransMsgSender
-    , TransMsgDiscarder
+    //, TransMsgDiscarder
     , StateMachine
 {
    TransStateMachine
@@ -44,7 +44,7 @@ struct TransStateMachine
 
 private:
    OVERRIDE(cub::Status doBuffer(const ev::Event& event));
-   OVERRIDE(void doDiscard(ev::EventId eventId));
+   //OVERRIDE(void doDiscard(ev::EventId eventId));
 
 private:
    cub::Status handleTransEvent(const ev::Event& event);
@@ -74,7 +74,7 @@ private:
    void rejectAllBufferedEvents();
    void discardBufferedEvent(ev::EventId eventId);
 
-   bool isTransEvent(const ev::Event& event) const;
+   //bool isTransEvent(const ev::Event& event) const;
 
    cub::Status rescheduleOnUnstable();
    cub::Status doReescheduleOnUnstable();
@@ -131,6 +131,7 @@ private:
    cub::Status handleEventOnSuspendState(const ev::Event&);
    TransStrategy getStrategyOnState(const ev::Event&) const;
    bool stateIgnoreFailure() const;
+   StateId getStateId() const;
 
 private:
    State*           state;
@@ -144,6 +145,7 @@ private:
    StateFactory& factory;
    EventQueue& eventQueue;
    tsl::InstanceId iid;
+
 };
 
 L4_NS_END

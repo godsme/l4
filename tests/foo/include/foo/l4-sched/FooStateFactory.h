@@ -35,10 +35,6 @@ struct FooStateFactory
    OVERRIDE(cub::Status getInterruptCauseByEvent(const ev::Event&) const);
    OVERRIDE(cub::Status getPreemptCauseByEvent(const ev::Event&) const);
 
-   OVERRIDE(bool isTransEvent(const ev::EventId) const);
-   OVERRIDE(bool isStrategyEvent(const ev::EventId eventId) const);
-   OVERRIDE(bool isTerminalEvent(const ev::EventId) const);
-
    OVERRIDE(void destroyState(State*));
    OVERRIDE(void reset());
 

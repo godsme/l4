@@ -418,7 +418,7 @@ Status EventQueue::pushBack(const Event& event, TransStrategyDecisionMaker& stra
 }
 
 //////////////////////////////////////////////////////////////////////////
-Status EventQueue::startReeschedule()
+Status EventQueue::startReschedule()
 {
     CUB_ASSERT_FALSE(unstable);
 

@@ -8,6 +8,7 @@
 #include <trans-dsl/TslStatus.h>
 #include <cub/mem/Placement.h>
 #include <cub/log/log.h>
+#include <foo/l4-sched/rejecter/Event1FailedRequestListener.h>
 #include <foo/l4-sched/state/unstable/FooReleaseState.h>
 #include <foo/l4-sched/state/unstable/FooTrans1State.h>
 #include <foo/l4-sched/state/unstable/FooTrans2State.h>
@@ -105,8 +106,13 @@ TransStrategyDecisionMaker* FooStateFactory::getStrategyMaker(const ev::EventId 
 }
 
 ///////////////////////////////////////////////////////////////////
-FailedRequestListener* FooStateFactory::getFailedRequestListener(const ev::EventId)
+FailedRequestListener* FooStateFactory::getFailedRequestListener(const ev::EventId eventId)
 {
+    switch(eventId)
+    {
+    case EV_EVENT1_T: return &(Event1Rejector::getInstance());
+    }
+
     return nullptr;
 }
 
@@ -126,32 +132,6 @@ cub::Status FooStateFactory::getInterruptCauseByEvent(const ev::Event&) const
 cub::Status FooStateFactory::getPreemptCauseByEvent(const ev::Event&) const
 {
     return TSL_SUCCESS;
-}
-
-///////////////////////////////////////////////////////////////////
-bool FooStateFactory::isTransEvent(const ev::EventId eventId) const
-{
-    switch(eventId)
-    {
-    case EV_EVENT1_T:
-    case EV_EVENT4_T:
-    case EV_EVENT_R:
-        return true;
-    }
-
-    return false;
-}
-
-///////////////////////////////////////////////////////////////////
-bool FooStateFactory::isStrategyEvent(const ev::EventId eventId) const
-{
-    return isTransEvent(eventId);
-}
-
-///////////////////////////////////////////////////////////////////
-bool FooStateFactory::isTerminalEvent(const ev::EventId) const
-{
-    return false;
 }
 
 ///////////////////////////////////////////////////////////////////

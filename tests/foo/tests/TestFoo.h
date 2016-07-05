@@ -115,11 +115,18 @@ FIXTURE(Foo)
         ASSERT_EQ(TSL_UNKNOWN_EVENT, sm.handleEvent(EVENT(EV_EVENT2)));
     }
 
-    // @test(depends="ev-5-2")
+    // @test(id="rel", depends="ev-5-2")
     TEST("should start release trans when recv EV_EVENT_R on action state")
     {
         ASSERT_EQ(TSL_CONTINUE, sm.handleEvent(EVENT(EV_EVENT_R)));
     }
+
+    // @test(depends="rel")
+    TEST("should be able to release")
+    {
+        ASSERT_EQ(TSL_CONTINUE, sm.handleEvent(EVENT(EV_EVENT6)));
+    }
+
 };
 
 

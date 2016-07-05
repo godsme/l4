@@ -24,7 +24,7 @@ struct EventQueue
 
    bool hasBufferedEvent() const;
 
-   cub::Status startReeschedule();
+   cub::Status startReschedule();
    cub::Status reescheduleDone(const tsl::InstanceId iid);
 
    cub::Status put(const tsl::InstanceId iid
