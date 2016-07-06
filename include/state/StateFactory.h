@@ -28,9 +28,6 @@ DEFINE_ROLE(StateFactory)
    ABSTRACT(State* createUnstableState(const ev::EventId));
    ABSTRACT(State* createPriUnstableState(const ev::EventId));
 
-//   ABSTRACT(bool isTransEvent(const ev::EventId) const);
-//   ABSTRACT(bool isStrategyEvent(const ev::EventId) const);
-
    ABSTRACT(const TransStrategyDecisionMaker* getStrategyMaker(const ev::EventId));
    ABSTRACT(FailedRequestListener* getFailedRequestListener(const ev::EventId));
 

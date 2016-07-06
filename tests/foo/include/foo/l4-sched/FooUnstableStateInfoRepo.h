@@ -9,7 +9,7 @@ L4_NS_BEGIN
 
 struct UnstableStateInfo;
 
-struct FooTransObjectFactory
+struct FooUnstableStateInfoRepo
 {
     static UnstableStateInfo& getUnstableInfoByEvent(ev::EventId);
 };

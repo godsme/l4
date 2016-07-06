@@ -32,7 +32,9 @@ DEFINE_ROLE(State)
    DEFAULT(cub::Status, onIdle(StateMachine&));
    DEFAULT(cub::Status, onIdleTransSchedule(StateMachine&));
    DEFAULT(void, onReentry(StateMachine&));
+
    DEFAULT(bool, isInitState() const);
+   DEFAULT(bool, isFinalState() const);
 
    DEFAULT(bool, ignoreFailure() const);
 };

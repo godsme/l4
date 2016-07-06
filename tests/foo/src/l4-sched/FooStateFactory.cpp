@@ -2,13 +2,14 @@
 #include <foo/l4-sched/state/stable/FooIdleState.h>
 #include <foo/l4-sched/state/stable/FooActiveState.h>
 #include <foo/l4-sched/FooEvent.h>
-#include <foo/l4-sched/FooTransObjectFactory.h>
 #include <state/StateId.h>
 #include <state/UnstableState.h>
 #include <trans-dsl/TslStatus.h>
 #include <cub/mem/Placement.h>
 #include <cub/log/log.h>
+#include <foo/l4-sched/FooUnstableStateInfoRepo.h>
 #include <foo/l4-sched/rejecter/Event1FailedRequestListener.h>
+#include <foo/l4-sched/state/stable/FooFinalState.h>
 #include <foo/l4-sched/state/unstable/FooReleaseState.h>
 #include <foo/l4-sched/state/unstable/FooTrans1State.h>
 #include <foo/l4-sched/state/unstable/FooTrans2State.h>
@@ -23,6 +24,7 @@ namespace
     {
         cub::Placement<FooIdleState> idle;
         cub::Placement<FooActiveState> active;
+        cub::Placement<FooFinalState> final;
     };
 }
 
@@ -62,6 +64,8 @@ State* FooStateFactory::createStableState(const StateId id)
         return new (&u) FooIdleState;
     case STATE_Active:
         return new (&u) FooActiveState;
+    case STATE_Final:
+        return new (&u) FooFinalState;
     default:
         break;
     }
@@ -72,7 +76,7 @@ State* FooStateFactory::createStableState(const StateId id)
 ///////////////////////////////////////////////////////////////////
 UnstableState* FooStateFactory::doCreateUnstableState(const ev::EventId eid)
 {
-    return FooTransObjectFactory::getUnstableInfoByEvent(eid).create(iid);
+    return FooUnstableStateInfoRepo::getUnstableInfoByEvent(eid).create(iid);
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -103,7 +107,7 @@ const TransStrategyDecisionMaker* FooStateFactory::getStrategyMaker(const ev::Ev
 {
     DBG_LOG("get strategy maker : %d", eid);
 
-    return FooTransObjectFactory::getUnstableInfoByEvent(eid).getStrategyMaker();
+    return FooUnstableStateInfoRepo::getUnstableInfoByEvent(eid).getStrategyMaker();
 }
 
 ///////////////////////////////////////////////////////////////////

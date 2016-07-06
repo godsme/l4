@@ -15,7 +15,7 @@ L4_NS_BEGIN
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 typedef GenericUnstableState
            < STATE_Release
-           , STATE_Idle
+           , STATE_Final
            , FooReleaseTrans
            , RejectAllStaticStrategy
            , RejectAllRuntimeStrategy> FooReleaseState;

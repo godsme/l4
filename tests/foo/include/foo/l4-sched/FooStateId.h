@@ -13,6 +13,7 @@ enum : StateId
 
     STATE_Idle,
     STATE_Active,
+    STATE_Final,
 
     INVALID_STATE_TYPE,  // add state type before STATE_TYPE_NUM
     STATE_UNSTABLE = 0xFE,

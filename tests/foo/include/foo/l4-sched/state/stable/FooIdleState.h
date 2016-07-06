@@ -11,6 +11,11 @@ struct FooIdleState : StableState
 {
     DEF_STATE_ID(Idle);
 
+    OVERRIDE(bool isInitState() const)
+    {
+        return true;
+    }
+
     OVERRIDE(TransStrategy getStrategy(const tsl::InstanceId, const ev::Event&) const);
 };
 

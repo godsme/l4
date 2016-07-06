@@ -1,8 +1,8 @@
 #include <cub/mem/ObjectAllocator.h>
-#include <foo/l4-sched/FooTransObjectFactory.h>
 #include <cub/mem/Placement.h>
 #include <foo/l4-sched/FooEvent.h>
 #include <foo/l4-sched/FooStateId.h>
+#include <foo/l4-sched/FooUnstableStateInfoRepo.h>
 #include <foo/l4-sched/state/unstable/FooReleaseState.h>
 #include <foo/l4-sched/state/unstable/FooTrans1State.h>
 #include <foo/l4-sched/state/unstable/FooTrans2State.h>
@@ -79,7 +79,7 @@ namespace
 #define __S(id, type) case id: return __STATE(type)::Info::getInstance()
 
 ///////////////////////////////////////////////////////////////////
-UnstableStateInfo& FooTransObjectFactory::getUnstableInfoByEvent(ev::EventId eventId)
+UnstableStateInfo& FooUnstableStateInfoRepo::getUnstableInfoByEvent(ev::EventId eventId)
 {
     switch(eventId)
     {

@@ -41,6 +41,7 @@ struct TransStateMachine
    cub::Status handleEvent(const ev::Event& event);
 
    bool isStable() const;
+   bool isDone() const;
 
 private:
    OVERRIDE(cub::Status doBuffer(const ev::Event& event));
@@ -145,7 +146,6 @@ private:
    StateFactory& factory;
    EventQueue& eventQueue;
    tsl::InstanceId iid;
-
 };
 
 L4_NS_END

@@ -819,5 +819,11 @@ void TransStateMachine::resetInitState()
     }
 }
 
+/////////////////////////////////////////////////////////////////////////
+bool TransStateMachine::isDone() const
+{
+    return state == nullptr ? true : state->isFinalState();
+}
+
 L4_NS_END
 
