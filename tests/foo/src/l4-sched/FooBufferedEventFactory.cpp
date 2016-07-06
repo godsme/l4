@@ -77,7 +77,7 @@ FooBufferedEventFactory& FooBufferedEventFactory::getInstance()
 ////////////////////////////////////////////////////////////////////////////
 BufferedEventInfo*
 FooBufferedEventFactory::createBufferedEvent(const Event& event,
-         TransStrategyDecisionMaker& strategy, FailedRequestListener* listener)
+         const TransStrategyDecisionMaker& strategy, FailedRequestListener* listener)
 {
     size_t size = event.getMsgSize();
     if(BlockEmptyEvent::withInBufferSize(size))

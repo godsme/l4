@@ -35,6 +35,7 @@ FooStateFactory::FooStateFactory(tsl::InstanceId iid) : iid(iid)
 ///////////////////////////////////////////////////////////////////
 FooStateFactory::~FooStateFactory()
 {
+    reset();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -69,22 +70,26 @@ State* FooStateFactory::createStableState(const StateId id)
 }
 
 ///////////////////////////////////////////////////////////////////
-StateId FooStateFactory::getStateIdByEvent(const ev::EventId eid) const
+UnstableState* FooStateFactory::doCreateUnstableState(const ev::EventId eid)
 {
-    switch(eid)
-    {
-    case EV_EVENT1_T: return STATE_Trans1;
-    case EV_EVENT4_T: return STATE_Trans2;
-    case EV_EVENT_R : return STATE_Release;
-    }
-
-    return INVALID_STATE_TYPE;
+    return FooTransObjectFactory::getUnstableInfoByEvent(eid).create(iid);
 }
 
 ///////////////////////////////////////////////////////////////////
 State* FooStateFactory::createUnstableState(const ev::EventId eid)
 {
-    return FooTransObjectFactory::createState(iid, getStateIdByEvent(eid));
+    UnstableState* newState = doCreateUnstableState(eid);
+    if(newState == nullptr)
+    {
+        return newState;
+    }
+
+    newState->startFrom(stateId);
+
+    stateId = newState->getId();
+    state = newState;
+
+    return state;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -94,18 +99,11 @@ State* FooStateFactory::createPriUnstableState(const ev::EventId)
 }
 
 ///////////////////////////////////////////////////////////////////
-TransStrategyDecisionMaker* FooStateFactory::getStrategyMaker(const ev::EventId eid)
+const TransStrategyDecisionMaker* FooStateFactory::getStrategyMaker(const ev::EventId eid)
 {
     DBG_LOG("get strategy maker : %d", eid);
 
-    switch(eid)
-    {
-    case EV_EVENT1_T: return FooTrans1State::getStrategyDecisionMaker();
-    case EV_EVENT4_T: return FooTrans2State::getStrategyDecisionMaker();
-    case EV_EVENT_R : return FooReleaseState::getStrategyDecisionMaker();
-    }
-
-    return nullptr;
+    return FooTransObjectFactory::getUnstableInfoByEvent(eid).getStrategyMaker();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -149,6 +147,10 @@ void FooStateFactory::destroyState(State* state)
 ///////////////////////////////////////////////////////////////////
 void FooStateFactory::reset()
 {
+    if(state != nullptr)
+    {
+        destroyState(state);
+    }
 }
 
 L4_NS_END

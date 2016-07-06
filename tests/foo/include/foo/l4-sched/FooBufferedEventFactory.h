@@ -10,7 +10,7 @@ struct FooBufferedEventFactory : BufferedEventFactory
    static FooBufferedEventFactory& getInstance();
 
    OVERRIDE(BufferedEventInfo*
-   createBufferedEvent(const ev::Event&, TransStrategyDecisionMaker&, FailedRequestListener*));
+   createBufferedEvent(const ev::Event&, const TransStrategyDecisionMaker&, FailedRequestListener*));
 
    OVERRIDE(bool isBufferedEvent(const ev::EventInfo&) const);
 };

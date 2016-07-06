@@ -1,6 +1,7 @@
 #include <cub/mem/ObjectAllocator.h>
 #include <foo/l4-sched/FooTransObjectFactory.h>
 #include <cub/mem/Placement.h>
+#include <foo/l4-sched/FooEvent.h>
 #include <foo/l4-sched/FooStateId.h>
 #include <foo/l4-sched/state/unstable/FooReleaseState.h>
 #include <foo/l4-sched/state/unstable/FooTrans1State.h>
@@ -16,6 +17,26 @@ namespace
     struct FooUnstableState
             : STATE
     {
+        struct Info
+                : UnstableStateInfo
+                , cub::Singleton<Info>
+        {
+            OVERRIDE(StateId getStateId() const)
+            {
+                return STATE::getStateId();
+            }
+
+            OVERRIDE(const TransStrategyDecisionMaker* getStrategyMaker() const)
+            {
+                return STATE::getStrategyDecisionMaker();
+            }
+
+            OVERRIDE(UnstableState* create(tsl::InstanceId iid))
+            {
+                return new FooUnstableState<STATE>(iid);
+            }
+        };
+
         explicit FooUnstableState(tsl::InstanceId iid)
             : STATE(iid)
         {}
@@ -55,19 +76,19 @@ namespace
 }
 
 ///////////////////////////////////////////////////////////////////
-#define __S(id, type) case STATE_ ## id: return new __STATE(type)(iid)
+#define __S(id, type) case id: return __STATE(type)::Info::getInstance()
 
 ///////////////////////////////////////////////////////////////////
-UnstableState* FooTransObjectFactory::createState(const tsl::InstanceId iid, const StateId sid)
+UnstableStateInfo& FooTransObjectFactory::getUnstableInfoByEvent(ev::EventId eventId)
 {
-    switch(sid)
+    switch(eventId)
     {
-    __S(Trans1,  FooTrans1State);
-    __S(Trans2,  FooTrans2State);
-    __S(Release, FooReleaseState);
+    __S(EV_EVENT1_T,  FooTrans1State);
+    __S(EV_EVENT4_T,  FooTrans2State);
+    __S(EV_EVENT_R,   FooReleaseState);
     }
 
-    return nullptr;
+    return NilUnStableStateInfo::getInstance();
 }
 
 L4_NS_END

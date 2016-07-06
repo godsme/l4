@@ -28,7 +28,7 @@ struct FooStateFactory
    OVERRIDE(State* createUnstableState(const ev::EventId));
    OVERRIDE(State* createPriUnstableState(const ev::EventId));
 
-   OVERRIDE(TransStrategyDecisionMaker* getStrategyMaker(const ev::EventId));
+   OVERRIDE(const TransStrategyDecisionMaker* getStrategyMaker(const ev::EventId));
    OVERRIDE(FailedRequestListener* getFailedRequestListener(const ev::EventId));
 
    OVERRIDE(cub::Status getFailCauseByEvent(const ev::Event&) const);
@@ -42,27 +42,16 @@ private:
 
    StateId getStateIdByEvent(const ev::EventId) const;
 
-//   State* doCreateState(const StateId);
-//   UnstableState* doCreateUnstableState(const ev::EventId);
-//   void updateState(UnstableState* newState);
-//
-//   void destroy();
-//   void destroyPriState();
-//   void updateFailStateId();
-//
-//   State* prepFailTrans(UnstableState* failState, const cub::Status failCause);
-//   State* resumeInitState();
+   UnstableState* doCreateUnstableState(const ev::EventId);
 
 private:
    State* state = nullptr;
 
    StateId stateId = STATE_NIL;
 
-   enum { SIZE_OF_STATE_SPACE     = 8
-        , SIZE_OF_LISTENER_SPACE  = 8 };
+   enum { SIZE_OF_STATE_SPACE     = 8};
 
    cub::U8 u[SIZE_OF_STATE_SPACE];
-   cub::U8 listener[SIZE_OF_LISTENER_SPACE];
 
    tsl::InstanceId iid;
 

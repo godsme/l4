@@ -7,6 +7,7 @@
 #include <trans-dsl/sched/concept/InstanceId.h>
 #include <event/event.h>
 #include <state/TransStrategyDecisionMaker.h>
+#include <state/UnstableStateInfo.h>
 
 FWD_DECL_EV(Event);
 
@@ -46,7 +47,12 @@ public:
         return P_SID;
     }
 
-    static TransStrategyDecisionMaker* getStrategyDecisionMaker()
+    static StateId getStateId()
+    {
+        return P_SID;
+    }
+
+    static const TransStrategyDecisionMaker* getStrategyDecisionMaker()
     {
         return &StaticStrategy::getInstance();
     }

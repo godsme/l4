@@ -31,7 +31,7 @@ DEFINE_ROLE(StateFactory)
 //   ABSTRACT(bool isTransEvent(const ev::EventId) const);
 //   ABSTRACT(bool isStrategyEvent(const ev::EventId) const);
 
-   ABSTRACT(TransStrategyDecisionMaker* getStrategyMaker(const ev::EventId));
+   ABSTRACT(const TransStrategyDecisionMaker* getStrategyMaker(const ev::EventId));
    ABSTRACT(FailedRequestListener* getFailedRequestListener(const ev::EventId));
 
    ABSTRACT(cub::Status getFailCauseByEvent(const ev::Event&) const);

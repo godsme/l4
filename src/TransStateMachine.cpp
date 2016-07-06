@@ -173,13 +173,13 @@ inline Status TransStateMachine::doBuffer(const Event& event)
 {
     //CUB_ASSERT_TRUE(isTransEvent(event));
 
-    TransStrategyDecisionMaker* strategy = factory.getStrategyMaker(event.getEventId());
+    auto strategy = factory.getStrategyMaker(event.getEventId());
     if(strategy == nullptr)
     {
         return TSL_UNKNOWN_EVENT;
     }
 
-    FailedRequestListener* listener = factory.getFailedRequestListener(event.getEventId());
+    auto listener = factory.getFailedRequestListener(event.getEventId());
 
     return eventQueue.put(iid, event, *strategy, listener);
 }
@@ -220,7 +220,7 @@ inline Status TransStateMachine::purge(const Event& event)
     //CUB_ASSERT_TRUE(isTransEvent(event));
 
     // Failed request listener is allowed to be null.
-    TransStrategyDecisionMaker* strategy = factory.getStrategyMaker(event.getEventId());
+    const TransStrategyDecisionMaker* strategy = factory.getStrategyMaker(event.getEventId());
     if(strategy == nullptr)
     {
         return TSL_UNKNOWN_EVENT;

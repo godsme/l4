@@ -19,7 +19,7 @@ namespace
 {
    struct SimpleTransEvent : TransactionEvent
    {
-      SimpleTransEvent(const Event& event, TransStrategyDecisionMaker& strategy, FailedRequestListener* listener)
+      SimpleTransEvent(const Event& event, const TransStrategyDecisionMaker& strategy, FailedRequestListener* listener)
          : event(event), strategy(strategy), listener(listener) {}
 
       OVERRIDE(TransStrategy getStrategy(const Event& event) const)
@@ -62,7 +62,7 @@ struct EventQueue::Scheduler
 
    Status purge
        ( const Event& event
-       , TransStrategyDecisionMaker& strategy
+       , const TransStrategyDecisionMaker& strategy
        , FailedRequestListener* listener)
    {
        Status status = doSchedule(SimpleTransEvent(event, strategy, listener));
@@ -76,7 +76,7 @@ struct EventQueue::Scheduler
 
    Status reschedule
             ( const Event& event
-            , TransStrategyDecisionMaker& strategy
+            , const TransStrategyDecisionMaker& strategy
             , FailedRequestListener* listener)
    {
         SimpleTransEvent incoming(event, strategy, listener);
@@ -268,7 +268,7 @@ bool EventQueue::hasBufferedEvent() const
 Status EventQueue::put
          ( const InstanceId iid
          , const Event& event
-         , TransStrategyDecisionMaker& strategy
+         , const TransStrategyDecisionMaker& strategy
          , FailedRequestListener* listener)
 {
    Status status = Scheduler(iid, *this).reschedule(event, strategy, listener);
@@ -280,7 +280,7 @@ Status EventQueue::put
 Status EventQueue::purge
           ( const InstanceId iid
           , const Event& event
-          , TransStrategyDecisionMaker& strategy
+          , const TransStrategyDecisionMaker& strategy
           , FailedRequestListener* listener)
 {
     return Scheduler(iid, *this).purge(event, strategy, listener);
@@ -330,7 +330,7 @@ bool EventQueue::isBufferedEvent(const Event& event) const
 //////////////////////////////////////////////////////////////////////////
 BufferedEventInfo* EventQueue::actualCreateBufferedEvent
         ( const Event& event
-         , TransStrategyDecisionMaker& strategy
+         , const TransStrategyDecisionMaker& strategy
          , FailedRequestListener* listener)
 {
     BufferedEventInfo* info = factory.createBufferedEvent(event, strategy, listener);
@@ -353,7 +353,7 @@ BufferedEventInfo* EventQueue::actualCreateBufferedEvent
 //////////////////////////////////////////////////////////////////////////////////////
 BufferedEventInfo* EventQueue::createBufferedEvent
          ( const Event& event
-         , TransStrategyDecisionMaker& strategy
+         , const TransStrategyDecisionMaker& strategy
          , FailedRequestListener* listener)
 {
     if(isBufferedEvent(event))
@@ -399,8 +399,10 @@ BufferedEventInfo* EventQueue::discardBufferedEvent(EventId eventId)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
-Status EventQueue::pushBack(const Event& event, TransStrategyDecisionMaker& strategy,
-         FailedRequestListener* listener)
+Status EventQueue::pushBack
+         ( const Event& event
+         , const TransStrategyDecisionMaker& strategy
+         , FailedRequestListener* listener)
 {
    BufferedEventInfo* info = createBufferedEvent(event, strategy, listener);
    CUB_ASSERT_VALID_PTR(info);

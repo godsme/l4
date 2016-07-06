@@ -29,13 +29,13 @@ struct EventQueue
 
    cub::Status put(const tsl::InstanceId iid
              , const ev::Event&
-             , TransStrategyDecisionMaker&
+             , const TransStrategyDecisionMaker&
              , FailedRequestListener*);
 
    cub::Status purge
        ( const tsl::InstanceId
        , const ev::Event&
-       , TransStrategyDecisionMaker&
+       , const TransStrategyDecisionMaker&
        , FailedRequestListener*);
 
    BufferedEventInfo* getFirstEvent();
@@ -49,16 +49,16 @@ private:
    void pushBack(const tsl::InstanceId iid, BufferedEventInfo& info);
    cub::Status pushBack
             ( const ev::Event& event
-            , TransStrategyDecisionMaker& strategy
+            , const TransStrategyDecisionMaker& strategy
             , FailedRequestListener* listener);
    BufferedEventInfo* createBufferedEvent
             ( const ev::Event& event
-            , TransStrategyDecisionMaker& strategy
+            , const TransStrategyDecisionMaker& strategy
             , FailedRequestListener* listener);
 
    BufferedEventInfo* actualCreateBufferedEvent
        ( const ev::Event& event
-       , TransStrategyDecisionMaker& strategy
+       , const TransStrategyDecisionMaker& strategy
        , FailedRequestListener* listener);
 
    cub::Status enQueue(BufferedEventInfo&);

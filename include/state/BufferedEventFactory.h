@@ -17,7 +17,8 @@ struct FailedRequestListener;
 DEFINE_ROLE(BufferedEventFactory)
 {
    ABSTRACT(BufferedEventInfo* createBufferedEvent
-        (const ev::Event&, TransStrategyDecisionMaker&, FailedRequestListener*));
+        (const ev::Event&, const TransStrategyDecisionMaker&, FailedRequestListener*));
+
    ABSTRACT(bool isBufferedEvent(const ev::EventInfo&) const);
 };
 
