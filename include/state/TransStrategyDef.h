@@ -9,16 +9,16 @@ L4_NS_BEGIN
 
 inline void dummyInstanceId(const tsl::InstanceId) {}
 
-#define BEGIN_STATE_STRATEGY_TABLE(state)            \
-TransStrategy state::getStrategy                     \
+#define BEGIN_STATE_STRATEGY_TABLE(state)                     \
+L4_NS::TransStrategy state::getStrategy                       \
     (const tsl::InstanceId iid, const ev::Event& event) const \
 {                                                    \
-    dummyInstanceId(iid);                            \
+    L4_NS::dummyInstanceId(iid);                     \
     switch(event.getEventId()) {
 
 #define END_STATE_STRATEGY_TABLE()                   \
     }                                                \
-    return TS_NIL;                                   \
+    return L4_NS::TS_NIL;                            \
 }
 
 #define STATE_STRATEGY(eventId, strategy)            \
@@ -31,7 +31,7 @@ TransStrategy state::getStrategy                     \
 #define DEFAULT_STRATEGY_MAKER(strategyMaker)       \
 default: return strategyMaker::getInstance().getStrategy(iid, event);
 
-#define STABLE_ACCEPTED_EVENT(eventId) STATE_STRATEGY(eventId, TS_REPLACE)
+#define STABLE_ACCEPTED_EVENT(eventId) STATE_STRATEGY(eventId, L4_NS::TS_REPLACE)
 
 L4_NS_END
 
