@@ -16,7 +16,7 @@ DEFINE_ROLE(TransStrategyDecisionMaker)
 
 ///////////////////////////////////////////////////////////////////
 #define __BEGIN_STATIC_STRATEGY(name)                   \
-TransStrategy name::getStrategy(const ev::Event& event) \
+L4_NS::TransStrategy name::getStrategy(const ev::Event& event) \
 { switch(event.getEventId()) {
 
 ///////////////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@ case eventId : return strategy;
 ///////////////////////////////////////////////////////////////////
 #define __END_STATIC_STRATEGY() \
  default: break; }              \
- return TS_UNKNOWN; }
+ return L4_NS::TS_UNKNOWN; }
 
 ///////////////////////////////////////////////////////////////////
 
