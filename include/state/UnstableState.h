@@ -9,6 +9,7 @@ namespace tsl
     struct ActionStatus;
     struct TransMutexScheduler;
     struct TransSignalScheduler;
+    struct Unknown;
 }
 
 L4_NS_BEGIN
@@ -22,6 +23,8 @@ struct UnstableState : State
    //////////////////////////////////////////////////////////////////////////
    DEFAULT(void, updateMutexScheduler(tsl::TransMutexScheduler&));
    DEFAULT(void, updateSignalScheduler(tsl::TransSignalScheduler&));
+
+   ABSTRACT(TSL_NS::Unknown* getUserContext() const);
 
 private:
    OVERRIDE(bool isStable() const);
